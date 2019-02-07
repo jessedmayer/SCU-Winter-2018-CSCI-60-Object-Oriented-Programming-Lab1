@@ -1,0 +1,213 @@
+//
+//  main.cpp
+//  lab1
+//
+//  Created by Nick Kniveton and Jesse Mayer
+#include <iostream>
+#include <string>
+using namespace std;
+struct Time{//military time, no am/pm
+    int hour;
+    int minute;
+};
+Time earlier(Time t1, Time t2){
+    Time ret;
+    if(t1.hour == t2.hour){
+        if(t1.minute<t2.minute)
+            ret = t1;
+        else
+            ret = t2;
+    }
+    else if(t1.hour<t2.hour){
+        ret = t1;
+    }
+    else{
+        ret = t2;
+    }
+    return ret;
+}
+struct Carpool
+{
+    string carpoolNames[5];
+    int carpoolSize;
+    Time carpoolTime;
+};
+Carpool combineCarpool(Carpool car1, Carpool car2) {
+    Carpool temp;
+    if ((car1.carpoolSize+car2.carpoolSize)<=5) {
+        for(int i=0; i<car1.carpoolSize; i++) {
+            temp.carpoolNames[i]=car1.carpoolNames[i];
+        }
+        for(int j=car1.carpoolSize; j<(car1.carpoolSize+car2.carpoolSize); j++) {
+            temp.carpoolNames[j]=car2.carpoolNames[j-car1.carpoolSize];
+        }
+        temp.carpoolSize=car1.carpoolSize+car2.carpoolSize;
+        temp.carpoolTime=earlier(car1.carpoolTime, car2.carpoolTime);
+    }
+    else {
+        for(int l=0; l<temp.carpoolSize; l++){
+            temp.carpoolNames[l]="0";
+        }
+        temp.carpoolSize=0;
+        temp.carpoolTime.hour=0;
+        temp.carpoolTime.minute=0;
+    }
+    return temp;
+}
+int main(){
+    Carpool car1{{"bob", "jim"},2,{02,03}};
+    Carpool car2{{"Kim"},1,{04,07}};
+    Carpool car4{{"Jeff","Henry","Jill","Sarah"},4,{06,04}};
+    
+    Carpool car3;
+    car3=combineCarpool(car1, car2);
+    
+    for(int k=0; k<car3.carpoolSize; k++){
+        cout<<car3.carpoolNames[k]<<endl;
+    };
+    cout<<car3.carpoolSize<<endl;
+    cout<<car3.carpoolTime.hour<<":"<<car3.carpoolTime.minute<<endl;
+}
+class carpool {
+public:
+    string carpoolNames[5];
+    int carpoolSize;
+    Time carpoolTime;
+    void combineCarpool();
+};
+void carpool::combineCarpool(carpool car){
+    if ((carpool.carpoolSize+car.carpoolSize)<=5) {
+        for(int i=carpool.carpoolSize; i<carpool.carpoolSize+car.carpoolSize; i++) {
+            carpool.carpoolNames[i]=car.carpoolNames[i-carpool.carpoolSize];
+        }
+        carpool.carpoolSize=carpool.carpoolSize+car.carpoolSize;
+        carpool.carpoolTime=earlier(carpool.carpoolTime, car.carpoolTime);
+    }
+    else {
+        for(int m=0; m<carpool.carpoolSize; m++){
+            carpool.carpoolNames[m]="0";
+        }
+        carpool.carpoolSize=0;
+        carpool.carpoolTime.hour=0;
+        carpool.carpoolTime.minute=0;
+    }
+    return carpool;
+}
+//main for part 3, carpool class defined with lower case 'c'
+/*
+ int main(){
+ carpool car1{{"bob", "jim"},2,{02,03}};
+ carpool car2{{"Kim"},1,{04,07}};
+ carpool car4{{"Jeff","Henry","Jill","Sarah"},4,{06,04}};
+ car1.combineCarpool(car2);
+ for(int k=0; k<car1.carpoolSize; k++){
+ cout<<car1.carpoolNames[k]<<endl;    
+ } 
+ cout<<car1.carpoolSize<<endl;
+ cout<<car1.carpoolTime.hour<<":"<<car1.carpoolTime.minute<<endl;
+ }
+ */
+
+
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Time
+{				//military time, no am/pm
+  int hour;
+  int minute;
+};
+
+Time earlier (Time t1, Time t2)
+{
+  Time ret;
+  if (t1.hour == t2.hour)
+    {
+      if (t1.minute < t2.minute)
+	ret = t1;
+      else
+	ret = t2;
+    }
+  else if (t1.hour < t2.hour)
+    {
+      ret = t1;
+    }
+  else
+    {
+      ret = t2;
+    }
+  return ret;
+}
+
+class Carpool {
+    
+public:
+    string names[5];
+    int num;
+    Time arrive;
+    Carpool combineCarpool(Carpool car2);
+
+    Carpool() {
+    names[5] = "";
+    num = 0;
+    arrive.hour = 0;
+    arrive.minute = 0;
+  }
+
+  Carpool(string nam[], int nu, Time ar) {
+    num = nu;
+    arrive = ar;
+    for (int i = 0; i < num; i++) {
+	names[i] = nam[i];
+    }
+  }
+};
+
+int main ()
+{
+    string n1[2] = { "Bpb", "an"};
+    string n2[2] = { "Bob", "Pan"};
+    Time Tinn1, Tinn2;
+    Tinn1.hour = 6;
+    Tinn1.minute = 19;
+    Tinn2.hour = 9;
+    Tinn2.minute = 21;
+    Carpool car1 (n1, 2, Tinn1);
+    Carpool car2 (n2, 2, Tinn2);
+    Carpool car4 = car2.combineCarpool(car1);
+    cout << "Arrive time: " << car4.arrive.hour << ":" << car4.arrive.minute << endl;
+    for (int a = 0; a < car4.num; a++) {
+      cout << car4.names[a] << endl;
+    }
+    
+    return 0;
+}
+
+Carpool Carpool::combineCarpool(Carpool car2)
+{
+    int totalPeople = num + car2.num;
+    string nameArray[totalPeople];
+    
+    if (totalPeople <= 5) {
+        int j = 0;
+        for (int i = 0; i < totalPeople; i++) {
+            if (i < num) {
+                nameArray[i] = names[i];
+            } else {
+                nameArray[i] = car2.names[j];
+                j += 1;
+            }
+        }
+
+    Time ne = earlier(arrive, car2.arrive);
+    Carpool car3(nameArray, totalPeople, ne);
+    return car3;
+    
+    } else {
+      car2.num = 0;
+      return car2;
+    }
+}
